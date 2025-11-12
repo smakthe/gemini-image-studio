@@ -1,4 +1,3 @@
-
 import { GoogleGenAI, Modality, GenerateContentResponse } from '@google/genai';
 import { AppMode, UploadedImage } from '../types';
 
@@ -23,7 +22,7 @@ export const fileToBase64 = (file: File): Promise<{ base64: string, mimeType: st
 
 export const generateImageWithImagen = async (prompt: string, negativePrompt?: string): Promise<string> => {
   try {
-    // The `negativePrompt` should be at the top level of the request, not inside `config`.
+    // The Imagen API expects `negativePrompt` at the top level of the request, alongside `prompt` and `config`.
     const requestPayload: {
       model: string;
       prompt: string;

@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import NEGATIVE_PROMPT_EXAMPLES from '../NEGATIVE_PROMPT_EXAMPLES';
 import { ChevronDownIcon, ChevronUpIcon } from './IconComponents';
+import SuggestionChips from './SuggestionChips';
 
 interface NegativePromptInputProps {
   prompt: string;
@@ -9,16 +10,11 @@ interface NegativePromptInputProps {
 
 const NegativePromptInput: React.FC<NegativePromptInputProps> = ({ prompt, onPromptChange }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [displayExamples, setDisplayExamples] = useState<string[]>([]);
-
-  useEffect(() => {
-    const shuffled = [...NEGATIVE_PROMPT_EXAMPLES].sort(() => 0.5 - Math.random());
-    setDisplayExamples(shuffled.slice(0, 5));
-  }, []);
 
   const handleSuggestionClick = (example: string) => {
     const lowerExample = example.toLowerCase();
-    if (prompt.toLowerCase().split(', ').includes(lowerExample)) {
+    const currentPrompts = prompt.toLowerCase().split(', ').filter(p => p.trim() !== '');
+    if (currentPrompts.includes(lowerExample)) {
       return;
     }
     const newPrompt = prompt ? `${prompt}, ${lowerExample}` : example;
@@ -62,23 +58,12 @@ const NegativePromptInput: React.FC<NegativePromptInputProps> = ({ prompt, onPro
             tabIndex={isOpen ? 0 : -1}
           />
           
-          <div className="pt-2">
-              <h3 className="text-sm font-semibold text-gray-400 mb-2">
-                Suggestions:
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {displayExamples.map((example) => (
-                  <button
-                    key={example}
-                    onClick={() => handleSuggestionClick(example)}
-                    className="px-3 py-1 bg-gray-700 text-gray-300 text-xs rounded-full hover:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    tabIndex={isOpen ? 0 : -1}
-                  >
-                    {example}
-                  </button>
-                ))}
-              </div>
-          </div>
+          <SuggestionChips
+            examples={NEGATIVE_PROMPT_EXAMPLES}
+            onSuggestionClick={handleSuggestionClick}
+            title="Suggestions:"
+            visibleCount={5}
+          />
         </div>
       </div>
     </div>

@@ -29,14 +29,14 @@ const Header: React.FC<HeaderProps> = ({ currentMode, onModeChange }) => {
               className={getButtonClasses(AppMode.GENERATE)}
             >
               <GenerateIcon className="w-5 h-5" />
-              <span className="hidden md:inline">Generate</span>
+              <span className="hidden md:inline">Generate Image</span>
             </button>
             <button
               onClick={() => onModeChange(AppMode.EDIT)}
               className={getButtonClasses(AppMode.EDIT)}
             >
               <EditIcon className="w-5 h-5" />
-              <span className="hidden md:inline">Image Editor</span>
+              <span className="hidden md:inline">Edit Image</span>
             </button>
             <button
               onClick={() => onModeChange(AppMode.TIME_TRAVEL)}
