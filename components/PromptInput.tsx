@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import { AppMode } from '../types';
-import { SparklesIcon, ChevronDownIcon, ChevronUpIcon } from './IconComponents';
+import { SparklesIcon, ChevronDownIcon, ChevronUpIcon, CloseIcon } from './IconComponents';
 import { useAnimatedPlaceholder } from '../hooks/useAnimatedPlaceholder';
 import { modeConfigs } from '../config/modeConfig';
 import SuggestionChips from './SuggestionChips';
@@ -56,7 +55,7 @@ const PromptInput: React.FC<PromptInputProps> = ({ mode, prompt, onPromptChange,
     }
   };
 
-  const textareaClasses = `w-full p-3 bg-gray-700 rounded-md border transition disabled:opacity-50 disabled:cursor-not-allowed ${
+  const textareaClasses = `w-full p-3 pr-10 bg-gray-700 rounded-md border transition disabled:opacity-50 disabled:cursor-not-allowed ${
     promptError
       ? 'border-red-500 ring-1 ring-red-500 focus:ring-red-500 focus:border-red-500'
       : 'border-gray-600 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500'
@@ -65,17 +64,28 @@ const PromptInput: React.FC<PromptInputProps> = ({ mode, prompt, onPromptChange,
   const renderContent = () => (
     <div className="flex flex-col space-y-4">
       <div>
-        <textarea
-          value={prompt}
-          onChange={(e) => onPromptChange(e.target.value)}
-          placeholder={animatedPlaceholder}
-          rows={3}
-          className={textareaClasses}
-          disabled={!isReady}
-          aria-label="Prompt input"
-          aria-invalid={!!promptError}
-          aria-describedby="prompt-error"
-        />
+        <div className="relative w-full">
+          <textarea
+            value={prompt}
+            onChange={(e) => onPromptChange(e.target.value)}
+            placeholder={animatedPlaceholder}
+            rows={3}
+            className={textareaClasses}
+            disabled={!isReady}
+            aria-label="Prompt input"
+            aria-invalid={!!promptError}
+            aria-describedby="prompt-error"
+          />
+          {prompt.length > 0 && isReady && (
+            <button
+              onClick={() => onPromptChange('')}
+              className="absolute top-3 right-3 p-1 text-gray-400 hover:text-white transition-colors rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              aria-label="Clear prompt"
+            >
+              <CloseIcon className="w-5 h-5" />
+            </button>
+          )}
+        </div>
         {promptError && <p id="prompt-error" className="text-sm text-red-400 mt-1">{promptError}</p>}
       </div>
 
